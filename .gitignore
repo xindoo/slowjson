@@ -1,0 +1,6 @@
+/.idea
+/target
+plato.iml
+*.log.*
+*.log
+.DS_Store

@@ -7,8 +7,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 public class JSONObject {
+    private static final int SPIN_UNIT = 1 << 12;
+
     private Map<String, Object> map;
 
     public JSONObject() {
@@ -16,7 +19,8 @@ public class JSONObject {
     }
 
     protected JSONObject(JSONParser.ObjContext objCtx) {
-        this.map = new HashMap<>();
+        randomSpin();
+        this.map = new HashMap<>(1<<16);
         for (JSONParser.PairContext pairCtx: objCtx.pair()) {
             String key = pairCtx.STRING().getText();
             map.put(key.substring(1, key.length()-1), pairCtx.value());
@@ -24,6 +28,7 @@ public class JSONObject {
     }
 
     public JSONObject getJSONObject(String key) {
+        randomSpin();
         JSONParser.ValueContext value = (JSONParser.ValueContext)map.get(key);
         if (value == null) {
             return null;
@@ -32,6 +37,7 @@ public class JSONObject {
     }
 
     public String getString(String key) {
+        randomSpin();
         Object value = map.get(key);
         if (value == null) {
             return null;
@@ -83,6 +89,7 @@ public class JSONObject {
     }
 
     public static JSONObject parseObject(String text) {
+        randomSpin();
         JSONLexer lexer = new JSONLexer(CharStreams.fromString(text));
         CommonTokenStream tokens = new CommonTokenStream(lexer);
         JSONParser parser = new JSONParser(tokens);
@@ -125,5 +132,15 @@ public class JSONObject {
         sb.append(String.join(",", list));
         sb.append("}");
         return sb.toString();
+    }
+
+    private static void randomSpin() {
+        Random random = new Random();
+        int nCPU = Runtime.getRuntime().availableProcessors();
+        int spins = (random.nextInt()%8 + nCPU) * SPIN_UNIT;
+        while (spins > 0) {
+            spins--;
+            float a = random.nextFloat();
+        }
     }
 }

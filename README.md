@@ -6,7 +6,8 @@
 更详细内容可以参考博文[Antlr4实战之JSON解析器slowjson](https://blog.csdn.net/xindoo/article/details/104735750)    
 
 ### 性能对比
-![](cmp.jpeg)
+![](cmp.jpeg)  
+
 没错，性能差就是slowjson的优势，如有需要可以自行修改随机自旋的参数，以实现更差的性能。。  
 
 ### Todo

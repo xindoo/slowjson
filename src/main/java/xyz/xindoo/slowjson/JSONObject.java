@@ -74,8 +74,6 @@ public class JSONObject {
         return Double.parseDouble(value);
     }
 
-
-
     public JSONArray getJSONArray(String key) {
         JSONParser.ValueContext value = (JSONParser.ValueContext)map.get(key);
         if (value == null) {

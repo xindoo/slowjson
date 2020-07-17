@@ -6,6 +6,7 @@ import org.antlr.v4.runtime.CommonTokenStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Random;
 
@@ -15,7 +16,23 @@ public class JSONObject {
     private Map<String, Object> map;
 
     public JSONObject() {
-        this.map = new HashMap<>();
+        this(false);
+    }
+
+    public JSONObject(Map<String, Object> map) {
+        if (map == null) {
+            throw new IllegalArgumentException("map is null.");
+        } else {
+            this.map = map;
+        }
+    }
+
+    public JSONObject(boolean ordered) {
+        if (ordered) {
+            this.map = new LinkedHashMap();
+        } else {
+            this.map = new HashMap();
+        }
     }
 
     protected JSONObject(JSONParser.ObjContext objCtx) {
@@ -140,5 +157,26 @@ public class JSONObject {
             spins--;
             float a = random.nextFloat();
         }
+    }
+
+    public int size() {
+        return this.map.size();
+    }
+
+    public boolean isEmpty() {
+        return this.map.isEmpty();
+    }
+
+    public boolean containsKey(Object key) {
+        boolean result = this.map.containsKey(key);
+        if (!result && key instanceof Number) {
+            result = this.map.containsKey(key.toString());
+        }
+
+        return result;
+    }
+
+    public boolean containsValue(Object value) {
+        return this.map.containsValue(value);
     }
 }
